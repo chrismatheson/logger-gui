@@ -29,4 +29,44 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 // *******************************************************
+
+app.get('/data/temperature', function(req, res){
+	var Things = new Array();
+	for (var i = 50 - 1; i >= 0; i--) {
+		Things[i] = new Array();
+		Things[i][0] = i;
+		Things[i][1] = Math.random();
+	};
+  res.send(JSON.stringify(Things));
+});
+
+app.get('/data/vibration', function(req, res){
+	var Things = new Array();
+	for (var i = 100 - 1; i >= 0; i--) {
+		Things[i] = new Array();
+		Things[i][0] = i;
+		Things[i][1] = Math.random();
+	};
+  res.send(JSON.stringify(Things));
+});
+
+app.get('/data/power', function(req, res){
+	var Things = new Array();
+	for (var i = 100 - 1; i >= 0; i--) {
+		Things[i] = new Array();
+		Things[i][0] = i;
+		Things[i][1] = Math.random();
+	};
+  res.send(JSON.stringify(Things));
+});
+
+app.get('/data/other', function(req, res){
+	var Things = new Array();
+	for (var i = 1000 - 1; i >= 0; i--) {
+		Things[i] = new Array();
+		Things[i][0] = i;
+		Things[i][1] = Math.random()*5;
+	};
+  res.send(JSON.stringify(Things));
+});
 app.listen(80);

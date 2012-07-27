@@ -54,7 +54,7 @@
                 </div>
                 <div class="span6">
                     <div class="page-header">
-                      <h1>Other</h1>
+                      <h1>Noise</h1>
                     </div>
                     <div id="otherGraph" style="width:400px;height:200px"></div>
                 </div>
@@ -63,33 +63,43 @@
     <script type="text/javascript">
     $(function () {
         //d1 brought in by import above
-                            
-        $.plot($("#temperatureGraph"), [
-            {
-                data: d1,
-                lines: { show: true, fill: true }
-            }
-        ]);
-        $.plot($("#vibrationGraph"), [
-            {
-                data: d1,
-                lines: { show: true, fill: true }
-            }
-        ]);
+        $.getJSON('http://localhost/data/temperature', function(rndData) {
+            $.plot($("#temperatureGraph"), [
+                {
+                    data: rndData,
+                    lines: { show: true, fill: true },
+                    color: "lightred"
+                }
+            ]);
+        });
+        
+        $.getJSON('http://localhost/data/vibration', function(rndData) {
+            $.plot($("#vibrationGraph"), [
+                {
+                    data: rndData,
+                    lines: { show: true, fill: true },
+                    color: "blue"
+                }
+            ]);
+        });
 
-        $.plot($("#powerGraph"), [
-            {
-                data: d1,
-                lines: { show: true, fill: true }
-            }
-        ]);
+        $.getJSON('http://localhost/data/power', function(rndData) {
+            $.plot($("#powerGraph"), [
+                {
+                    data: rndData,
+                    lines: { show: true, fill: true },
+                }
+            ]);
+        });
 
-        $.plot($("#otherGraph"), [
-            {
-                data: d1,
-                lines: { show: true, fill: true }
-            }
-        ]);
+        $.getJSON('http://localhost/data/other', function(rndData) {
+            $.plot($("#otherGraph"), [
+                {
+                    data: rndData,
+                    lines: { show: true, fill: true },
+                }
+            ]);
+        });
     });
     </script>
 
