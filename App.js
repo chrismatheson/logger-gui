@@ -30,16 +30,7 @@ app.configure('production', function(){
 });
 // *******************************************************
 
-app.get('/data/temperature', function(req, res){
-	var Things = new Array();
-	for (var i = 50 - 1; i >= 0; i--) {
-		Things[i] = new Array();
-		Things[i][0] = i;
-		Things[i][1] = Math.random();
-	};
-  res.send(JSON.stringify(Things));
-});
-
+// ---- Vibration sensor endpoint ----
 app.get('/data/vibration', function(req, res){
 	var Things = new Array();
 	for (var i = 100 - 1; i >= 0; i--) {
@@ -50,6 +41,8 @@ app.get('/data/vibration', function(req, res){
   res.send(JSON.stringify(Things));
 });
 
+
+// ---- Power sensor endpoint ----
 app.get('/data/power', function(req, res){
 	var Things = new Array();
 	for (var i = 100 - 1; i >= 0; i--) {
@@ -60,13 +53,16 @@ app.get('/data/power', function(req, res){
   res.send(JSON.stringify(Things));
 });
 
-app.get('/data/other', function(req, res){
+//---- Default Random data endpoint ----
+app.get('/data/*', function(req, res){
 	var Things = new Array();
-	for (var i = 1000 - 1; i >= 0; i--) {
+	for (var i = 50 - 1; i >= 0; i--) {
 		Things[i] = new Array();
 		Things[i][0] = i;
-		Things[i][1] = Math.random()*5;
+		Things[i][1] = Math.random();
 	};
   res.send(JSON.stringify(Things));
 });
+
+
 app.listen(80);
