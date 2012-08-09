@@ -10,7 +10,7 @@
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
     <script language="javascript" type="text/javascript" src="flot/jquery.js"></script>
     <script language="javascript" type="text/javascript" src="flot/jquery.flot.js"></script>
-    <script language="javascript" type="text/javascript" src="d1.json"></script>
+    <script language="javascript" type="text/javascript" src="flot/jquery.flot.time.js"></script>
 
  </head>
     <body>
@@ -58,9 +58,9 @@
                 </div>
                 <div class="span6">
                     <div class="page-header">
-                      <h1>Noise</h1>
+                      <h1>Sensor1</h1>
                     </div>
-                    <div id="random" class="graph" style="width:400px;height:200px"></div>
+                    <div id="sensor1" class="graph" style="width:400px;height:200px"></div>
                 </div>
             </div>
         </div>
@@ -70,16 +70,16 @@
         $(".graph").each(function(i,obj){
             setInterval(function (){
                 $.getJSON('http://localhost/data/'+obj.id, function(rndData) {
-                    $.plot(obj, [
-                        {
-                            data: rndData,
-                        }
-                    ]);
+                    $.plot(obj, [{data: rndData}],{
+                        xaxis: {
+                            mode: "time",
+                            timeformat: "%d %H:%M:%S"
+                            }
+                    });
                 });
             }, 1000);
         });
 
-        //d1 brought in by import above
     });
     </script>
 

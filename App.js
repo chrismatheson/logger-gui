@@ -11,8 +11,14 @@
 //   views/
 //
 var express = require('express');
-var app = module.exports = express.createServer();
+var serialport = require('serialport');
+var SerialPort = serialport.SerialPort;
+var StringDecoder = require('string_decoder').StringDecoder;
+var util = require('util');
+var buffer = require('buffer');
 var viewEngine = 'jade'; // modify for your view engine
+
+var app = module.exports = express.createServer();
 // Configuration
 app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -30,39 +36,76 @@ app.configure('production', function(){
 });
 // *******************************************************
 
+var dataModel = {
+	line: [ [ 0, 0 ],[ 1, 1 ],[ 2, 2 ],[ 3, 3 ],[ 4, 4 ],[ 5, 5 ],[ 6, 6 ],[ 7, 7 ],[ 8,8 ],[ 9, 9 ] ],
+	random: [],
+	addMeas: function(newMeas){
+		// this scopes to dataModel
+		var selector = Object.keys(newMeas)[0];
+		if(!this[selector]){
+			//lazy creation
+			this[selector] = [];
+			this[selector].length = 100;
+		}
+		this[selector].push([(new Date()).getTime(),newMeas[selector]]);
+		this[selector].shift();
+	}
+};
+
 // ---- Vibration sensor endpoint ----
 app.get('/data/vibration', function(req, res){
-	var Things = new Array();
-	for (var i = 100 - 1; i >= 0; i--) {
-		Things[i] = new Array();
-		Things[i][0] = i;
-		Things[i][1] = Math.random();
-	};
-  res.send(JSON.stringify(Things));
+  res.send(JSON.stringify(dataModel.random));
 });
 
-
-// ---- Power sensor endpoint ----
-app.get('/data/power', function(req, res){
-	var Things = new Array();
-	for (var i = 100 - 1; i >= 0; i--) {
-		Things[i] = new Array();
-		Things[i][0] = i;
-		Things[i][1] = Math.random();
-	};
-  res.send(JSON.stringify(Things));
+app.get('/data/:sel', function(req, res){
+	/*
+	* end of URL is data selector i.e. /data/sensor1 returns data.sensor1
+	* if selector does not exist then return random data
+	*/
+	// console.log('Req for dataModel.'+req.params.sel);
+	if(dataModel[req.params.sel]){
+		// console.log('returned'+JSON.stringify(dataModel[req.params.sel]));
+		res.send(JSON.stringify(dataModel[req.params.sel]));
+	}else{
+		// console.log('returned random data');
+		res.send(JSON.stringify(dataModel.random));
+	}
 });
-
-//---- Default Random data endpoint ----
-app.get('/data/*', function(req, res){
-	var Things = new Array();
-	for (var i = 50 - 1; i >= 0; i--) {
-		Things[i] = new Array();
-		Things[i][0] = i;
-		Things[i][1] = Math.random();
-	};
-  res.send(JSON.stringify(Things));
-});
-
 
 app.listen(80);
+
+// ------- Recieve input from UART --------
+var port = process.argv[0] || "COM7";
+var sp = new SerialPort(port,
+	{
+		baudrate: 9600,
+		databits: 8,
+		stopbits: 1,
+		parity: 'none',
+		flowcontrol: false,
+		buffersize: 255,
+		parser: serialport.parsers.readline("\r")
+	});
+
+sp.on("data", function (data) {
+	// strip dodgy chars
+	var re = /[\u0020-\u0080]/;
+	var cleaned = '';
+	var removed = '';
+	for (var i = 0; i < data.length; i++) {
+		if(re.test(data[i])){
+			cleaned += data[i];
+		}else{
+			removed += data[i];
+		}
+	}
+	// TODO : add logging to disk
+	dataModel.addMeas(JSON.parse(cleaned));
+});
+
+// ------- Generate random data ------------
+dataModel.random.length = 100;
+setInterval(function(argument) {
+	dataModel.random.push([(new Date()).getTime(),Math.random()]);
+	dataModel.random.shift();
+},100);
