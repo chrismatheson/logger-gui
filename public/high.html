@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <script type="text/javascript" src="bootstrap\js\bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap\css\bootstrap.min.css"/>
+
+    <title>Flot Examples</title>
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="flot/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="flot/jquery.flot.js"></script>
+    <script language="javascript" type="text/javascript" src="flot/jquery.flot.time.js"></script>
+    <script language="javascript" type="text/javascript" src="highcharts/js/highcharts.js"></script>
+
+ </head>
+    <body>
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="container">
+                    <ul class="nav">
+                        <li><a href="index.html">Graphs</a></li>
+                        <li class="active"><a href="high.html">HighCharts</a></li>
+                        <li><a href="snapshot.html">Snapshot</a></li>
+                        <li><a href="#">Logs</a></li>
+                        <li><a href="setup.html">Setup</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Content -->
+        <div class="container-fluid span12">
+            <div class="row-fluid span12">
+                <div class="span6">
+                    <div class="page-header">
+                      <h1>Temperature</h1>
+                    </div>
+                    <!--
+                    the 'id' of each element with class 'graph' will be used as the data endpoint 
+                    E.G the div below will get its data from localhost/data/random
+                    <div id="random" class="graph" style="width:400px;height:200px"></div>
+                    -->
+                    <div id="temperature" class="graph" style="width:400px;height:200px"></div>
+                </div>
+                <div class="span6">
+                    <div class="page-header">
+                      <h1>PwrElecTemp</h1>
+                    </div>
+                    <div id="PwrElecTemp" class="graph" style="width:400px;height:200px"></div>
+                </div>
+            </div>
+            <div class="row-fluid span12">
+                <div class="span6">
+                    <div class="page-header">
+                      <h1>high</h1>
+                    </div>
+                    <div id="high" class="graph" style="width:400px;height:200px"></div>
+                </div>
+                <div class="span6">
+                    <div class="page-header">
+                      <h1>Sensor1</h1>
+                    </div>
+                    <div id="sensor1" class="graph" style="width:400px;height:200px"></div>
+                </div>
+            </div>
+        </div>
+    <script type="text/javascript">
+    $(function () {
+
+        $(".graph").each(function(i,obj){
+            setInterval(function (){
+                $.getJSON('http://localhost/data/'+obj.id, function(rndData) {
+                    var chart = new Highcharts.Chart({
+                        animation: false,
+                        chart: {
+                            renderTo: obj.id,
+                            type: 'line',
+                        },
+                        yAxis: {
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+                        plotOptions: {
+                            line: {
+                                animation:false
+                            }
+                        },
+                        series: [{
+                            name: 'test',
+                            data: rndData
+                        }]
+                    });
+                });
+            }, 1000);
+        });
+
+    });
+            
+    </script>
+
+ </body>
+</html>

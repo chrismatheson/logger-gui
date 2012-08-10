@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <script type="text/javascript" src="bootstrap\js\bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap\css\bootstrap.min.css"/>
+
+    <title>Flot Examples</title>
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="flot/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="flot/jquery.flot.js"></script>
+    <script language="javascript" type="text/javascript" src="d1.json"></script>
+
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container">
+                <ul class="nav">
+                    <li><a href="index.html">Graphs</a></li>
+                    <li><a href="high.html">HighCharts</a></li>
+                    <li class="active"><a href="snapshot.html">Snapshot</a></li>
+                    <li><a href="#">Logs</a></li>
+                    <li><a href="setup.html">Setup</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Content -->
+    <div class="container-fluid span12">
+        <div class="row-fluid span12">
+            <div class="page-header">
+                <h1>Data Snapshot</h1>
+                <p>This section provides a snapshot of the data held at the server.</p>
+            </div>
+            <div id="snap"/>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    $.getJSON('http://localhost/data/snap', function(rndData) {
+        $('#snap').html(JSON.stringify(rndData));
+    });
+</script>
+</html>
