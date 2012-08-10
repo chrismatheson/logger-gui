@@ -14,6 +14,7 @@ var express = require('express');
 var serialport = require('serialport');
 var SerialPort = serialport.SerialPort;
 var StringDecoder = require('string_decoder').StringDecoder;
+var fs = require('fs');
 var util = require('util');
 var buffer = require('buffer');
 var viewEngine = 'jade'; // modify for your view engine
@@ -57,6 +58,10 @@ app.get('/data/vibration', function(req, res){
   res.send(JSON.stringify(dataModel.random));
 });
 
+app.get('/data/snap', function(req, res){
+  res.send(JSON.stringify(dataModel));
+});
+
 app.get('/data/:sel', function(req, res){
 	/*
 	* end of URL is data selector i.e. /data/sensor1 returns data.sensor1
@@ -75,7 +80,8 @@ app.get('/data/:sel', function(req, res){
 app.listen(80);
 
 // ------- Recieve input from UART --------
-var port = process.argv[0] || "COM7";
+var port = process.argv[2] || "COM7";
+console.log('listening for data on '+port);
 var sp = new SerialPort(port,
 	{
 		baudrate: 9600,
@@ -89,18 +95,24 @@ var sp = new SerialPort(port,
 
 sp.on("data", function (data) {
 	// strip dodgy chars
-	var re = /[\u0020-\u0080]/;
+	var re = /[a-zA-Z0-9{}:""'.:\-\+]/;
 	var cleaned = '';
 	var removed = '';
 	for (var i = 0; i < data.length; i++) {
 		if(re.test(data[i])){
 			cleaned += data[i];
 		}else{
+
 			removed += data[i];
 		}
 	}
 	// TODO : add logging to disk
-	dataModel.addMeas(JSON.parse(cleaned));
+	try{
+		dataModel.addMeas(JSON.parse(cleaned));
+	}catch(e){
+		console.log('got raw data %s \n removed %s\nfailed to parse %s into an object', data.toString(), removed, cleaned);
+		fs.appendFile('failedObjects.txt', util.inspect(data,true,null));
+	}
 });
 
 // ------- Generate random data ------------

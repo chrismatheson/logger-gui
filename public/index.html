@@ -12,6 +12,7 @@
     <script language="javascript" type="text/javascript" src="flot/jquery.flot.js"></script>
     <script language="javascript" type="text/javascript" src="flot/jquery.flot.time.js"></script>
 
+
  </head>
     <body>
         <div class="navbar">
@@ -21,7 +22,8 @@
                         <li class="active">
                             <a href="#">Graphs</a>
                         </li>
-                        <li><a href="#">More</a></li>
+                        <li><a href="high.html">HighCharts</a></li>
+                        <li><a href="snapshot.html">Snapshot</a></li>
                         <li><a href="#">Logs</a></li>
                         <li><a href="setup.html">Setup</a></li>
                     </ul>
@@ -33,34 +35,53 @@
             <div class="row-fluid span12">
                 <div class="span6">
                     <div class="page-header">
-                      <h1>Temperature</h1>
+                      <h1>Output Current (A)</h1>
                     </div>
                     <!--
                     the 'id' of each element with class 'graph' will be used as the data endpoint 
                     E.G the div below will get its data from localhost/data/random
                     <div id="random" class="graph" style="width:400px;height:200px"></div>
                     -->
-                    <div id="temperature" class="graph" style="width:400px;height:200px"></div>
+                    <div id="IOut" class="graph" style="width:400px;height:200px"></div>
                 </div>
                 <div class="span6">
                     <div class="page-header">
-                      <h1>Vibration</h1>
+                      <h1>Power Electronics Temp (*C)</h1>
                     </div>
-                    <div id="vibration" class="graph" style="width:400px;height:200px"></div>
+                    <div id="PwrElecTemp" class="graph" style="width:400px;height:200px"></div>
                 </div>
             </div>
             <div class="row-fluid span12">
                 <div class="span6">
                     <div class="page-header">
-                      <h1>Power</h1>
+                      <h1>Output Voltage (V)</h1>
                     </div>
-                    <div id="power" class="graph" style="width:400px;height:200px"></div>
+                    <div id="VOut" class="graph" style="width:400px;height:200px"></div>
                 </div>
                 <div class="span6">
                     <div class="page-header">
-                      <h1>Sensor1</h1>
+                      <h1>Gearbox Vibration X-axis (g)</h1>
                     </div>
-                    <div id="sensor1" class="graph" style="width:400px;height:200px"></div>
+                    <div id="GbVX" class="graph" style="width:400px;height:200px"></div>
+                </div>
+            </div>
+	    <div class="row-fluid span12">
+                <div class="span6">
+                    <div class="page-header">
+                      <h1>Stator Current (A)</h1>
+                    </div>
+                    <!--
+                    the 'id' of each element with class 'graph' will be used as the data endpoint 
+                    E.G the div below will get its data from localhost/data/random
+                    <div id="random" class="graph" style="width:400px;height:200px"></div>
+                    -->
+                    <div id="IStator" class="graph" style="width:400px;height:200px"></div>
+                </div>
+                <div class="span6">
+                    <div class="page-header">
+                      <h1>Rotor Current (A)</h1>
+                    </div>
+                    <div id="IRotor" class="graph" style="width:400px;height:200px"></div>
                 </div>
             </div>
         </div>
