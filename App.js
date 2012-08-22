@@ -95,6 +95,8 @@ var sp = new SerialPort(port,
 
 sp.on("data", function (data) {
 	// strip dodgy chars
+	// I think this function could do with some cleaning up. Especialy if full JSON parsing is to be supported
+	// instead of just the ones required for Joe's project
 	var re = /[a-zA-Z0-9{}:""'.:\-\+]/;
 	var cleaned = '';
 	var removed = '';
@@ -102,7 +104,6 @@ sp.on("data", function (data) {
 		if(re.test(data[i])){
 			cleaned += data[i];
 		}else{
-
 			removed += data[i];
 		}
 	}
